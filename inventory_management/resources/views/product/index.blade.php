@@ -12,8 +12,8 @@
             <div class="col-md-12">
                 <div class="card">
                         <div class="card-header d-flex justify-content-between align-item-center">
-                            <h1>Inventory Management</h1>
-                            <a href="{{ route('category.create') }}" class="btn btn-primary">Add New</a>
+                            <h1>Product List</h1>
+                            <a href="{{ route('product.create') }}" class="btn btn-primary">Add New</a>
                         </div>
                         <div class="card-body">
                             <table class="table table-hover table-bordered table-striped table-responsive">
@@ -29,25 +29,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($products as $Product)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{{ $category->slug }}</td>
-                                        <td><span class="badge{{ $category->status == 1 ? ' bg-success' : ' bg-danger' }}">{{ $category->status == 1 ? ' Active' : ' Inactive' }}</span></td>
-                                        <td>{{date('d M Y, h:i:s A', strtotime($category['created_at']))}}</td>
-                                        <td>{{$category->updated_at != $category->created_at ? date('d M Y, h:i:s A', strtotime($category['updated_at'])) : 'NULL'}}</td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->slug }}</td>
+                                        <td><span class="badge{{ $product->status == 1 ? ' bg-success' : ' bg-danger' }}">{{ $product->status == 1 ? ' Active' : ' Inactive' }}</span></td>
+                                        <td>{{date('d M Y, h:i:s A', strtotime($product['created_at']))}}</td>
+                                        <td>{{$product->updated_at != $product->created_at ? date('d M Y, h:i:s A', strtotime($product['updated_at'])) : 'NULL'}}</td>
                                         <td>
                                             <div class="btn-group gap-2 d-flex justify-content-center" role="group">
-                                                <a href="{{ route('category.status', $category->id) }}" class="btn btn-{{ $category->status == 1 ? 'danger' : 'success' }}">{{ $category->status == 1 ? 'Inactive' : 'Active' }}</a>
+                                                <a href="{{ route('product.status', $product->id) }}" class="btn btn-{{ $product->status == 1 ? 'danger' : 'success' }}">{{ $product->status == 1 ? 'Inactive' : 'Active' }}</a>
 
-                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
-                                                <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger" onclick="return confirm('Are you sure?')"}}">Delete</a>
+                                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-primary">Edit</a>
+                                                <a href="{{ route('product.delete', $product->id) }}" class="btn btn-danger" onclick="return confirm('Are you sure?')"}}">Delete</a>
                                             </div>
 
                                         </td>
-                                        
-                                        
                                     </tr>
                                     @endforeach
                                 </tbody>
