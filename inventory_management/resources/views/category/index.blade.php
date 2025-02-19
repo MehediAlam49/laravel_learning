@@ -37,7 +37,15 @@
                                         <td><span class="badge{{ $category->status == 1 ? ' bg-success' : ' bg-danger' }}">{{ $category->status == 1 ? ' Active' : ' Inactive' }}</span></td>
                                         <td>{{date('d M Y, h:i:s A', strtotime($category['created_at']))}}</td>
                                         <td>{{$category->updated_at != $category->created_at ? date('d M Y, h:i:s A', strtotime($category['updated_at'])) : 'NULL'}}</td>
-                                        <td>Action</td>
+                                        <td>
+                                            <div class="btn-group gap-2 d-flex justify-content-center" role="group">
+                                                <a href="{{ route('category.status', $category->id) }}" class="btn btn-{{ $category->status == 1 ? 'danger' : 'success' }}">{{ $category->status == 1 ? 'Inactive' : 'Active' }}</a>
+
+                                                <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+                                                <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger" onclick="return confirm('Are you sure?')"}}">Delete</a>
+                                            </div>
+
+                                        </td>
                                         
                                         
                                     </tr>
