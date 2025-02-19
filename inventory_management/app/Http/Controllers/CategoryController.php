@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\category;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 
@@ -20,12 +21,16 @@ class CategoryController extends Controller
     }
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|min:6|max:255|unique:categories,name',
+            'status' => 'required|boolean',
+        ]);
         $category = new category();
         $category->name = $request->name;
         $category->slug = str::slug($request->name);
         $category->status = $request->status;
         $category->save();
-        return redirect()->route('category.index')->with('success', 'Category created successfully');
+        return redirect()->route('category.index')->withInput()->with('success', 'Category created successfully');
     }
 
     public function edit($id)
@@ -35,12 +40,17 @@ class CategoryController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|min:6|max:255|unique:categories,name,' . $id,
+            'status' => 'required|boolean',
+        ]);
+
         $category = category::findOrFail($id);
         $category->name = $request->name;
         $category->slug = str::slug($request->name);
         $category->status = $request->status;
         $category->update();
-        return redirect()->route('category.index')->with('success', 'Category created successfully');
+        return redirect()->route('category.index')->withInput()->with('success', 'Category created successfully');
     }
 
     public function delete($id)

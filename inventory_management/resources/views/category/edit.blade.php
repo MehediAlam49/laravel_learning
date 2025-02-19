@@ -21,6 +21,9 @@
                                 <div class="mb-3">
                                   <label for="name" class="form-label">Name</label>
                                   <input type="text" class="form-control" id="name" name="name" placeholder="Category Name" value="{{ $category->name }}">
+                                  @error('name')
+                                      <span class="text-danger">{{ $message }}</span>
+                                  @enderror
                                 </div>
                                 <div class="mb-3">
                                   <label for="status" class="form-label">Status</label>
@@ -29,6 +32,9 @@
                                     <option value="1", {{ $category->status == 1 ? 'selected' : ''}}>Active</option>
                                     <option value="0", {{ $category->status == 0 ? 'selected' : ''}}>Inactive</option>
                                   </select>
+                                  @error('status')
+                                      <span class="text-danger">{{ $message }}</span>
+                                  @enderror
                                   
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update</button>
