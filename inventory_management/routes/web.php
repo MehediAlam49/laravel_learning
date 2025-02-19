@@ -9,4 +9,6 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'category', 'as' => 'category.'], function(){
     Route::get('/index', [CategoryController::class, 'index'])->name('index');
+    Route::get('/create', [CategoryController::class, 'create'])->name('create');
+    Route::post('/store', [CategoryController::class, 'store'])->name('store');
 });
