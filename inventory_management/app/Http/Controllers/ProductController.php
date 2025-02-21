@@ -20,25 +20,36 @@ class ProductController extends Controller
     public function create()
     {
         $categories = category::latest()->get();
-        return view('category.create', compact('categories'));
+        return view('product.create', compact('categories'));
     }
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|min:6|max:255|unique:categories,name',
-    //         'status' => 'required|boolean',
-    //     ]);
-    //     $category = new category();
-    //     $category->name = $request->name;
-    //     $category->slug = str::slug($request->name);
-    //     $category->status = $request->status;
-    //     $category->save();
-    //     return redirect()->route('category.index')->withInput()->with('success', 'Category created successfully');
-    // }
+    public function store(Request $request)
+    {
+        // $request->validate([
+        //     'name' => 'required|min:6|max:255|unique:categories,name',
+        //     'status' => 'required|boolean',
+        // ]);
+
+        $product = new product();
+        $product->category_id = $request->category_id;
+        $product->name = $request->name;
+        $product->slug = str::slug($request->name);
+        $product->price = $request->price;
+        $product->status = $request->status;
+        $product->description = $request->description;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = str::slug($request->name) . '-' . time() . '.' . $extension;
+            $path = $file->storeAs('public/products', $filename);
+            $product->image = $path;
+        }
+        $product->save();
+        return redirect()->route('product.index')->withInput()->with('success', 'product created successfully');
+    }
 
     // public function edit($id)
     // {
-    //     $category = category::findOrFail($id);
+    //     $product = category::findOrFail($id);
     //     return view('category.edit', compact('category'));
     // }
     // public function update(Request $request, $id)
@@ -48,26 +59,26 @@ class ProductController extends Controller
     //         'status' => 'required|boolean',
     //     ]);
 
-    //     $category = category::findOrFail($id);
-    //     $category->name = $request->name;
-    //     $category->slug = str::slug($request->name);
-    //     $category->status = $request->status;
-    //     $category->update();
+    //     $product = category::findOrFail($id);
+    //     $product->name = $request->name;
+    //     $product->slug = str::slug($request->name);
+    //     $product->status = $request->status;
+    //     $product->update();
     //     return redirect()->route('category.index')->withInput()->with('success', 'Category created successfully');
     // }
 
     // public function delete($id)
     // {
-    //     $category = category::findOrFail($id);
-    //     $category->delete();
+    //     $product = category::findOrFail($id);
+    //     $product->delete();
     //     return redirect()->route('category.index')->with('success', 'Category deleted successfully');
     // }
 
-    // public function status($id)
-    // {
-    //     $category = category::findOrFail($id);
-    //     $category->status = !$category->status;
-    //     $category->update();
-    //     return redirect()->route('category.index')->with('success', 'Category status updated successfully');
-    // }
+    public function status($id)
+    {
+        $product = product::findOrFail($id);
+        $product->status = !$product->status;
+        $product->update();
+        return redirect()->route('product.index')->with('success', 'product status updated successfully');
+    }
 }
