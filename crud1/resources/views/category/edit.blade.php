@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>Create- Inventory Management</title>
+        <title>Edit- Inventory Management</title>
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta
@@ -29,15 +29,15 @@
                         <h1 class="text-center">Inventory Management System</h1>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h2>Add Category</h2>
+                                <h2>Edit Category</h2>
                                 <a href="{{ route('category.index') }}" class="btn btn-primary">Category List</a>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('category.store') }}" method="POST">
+                                <form action="{{ route('category.update', $category->id) }}" enctype="multipart/form-data" method="POST">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="title" class="form-label">Title</label>
-                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter category title" value="{{ old('title') }}">
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Enter category title" value="{{ $category->title }}">
                                     </div>
                                     @error('title')
                                         <span class="text-danger">{{ $message }}</span>
@@ -46,8 +46,8 @@
                                         <label for="status" class="form-label">Status</label>
                                         <select name="status" id="status" class="form-select">
                                             <option value="" selected-hidden>Select Status</option>
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
+                                            <option value="1" {{ $category->status == 1 ? 'selected' : '' }}>Active</option>
+                                            <option value="0" {{ $category->status == 0 ? 'selected' : '' }}>Inactive</option>
                                         </select>
                                     </div>
                                     @error('status')
@@ -55,7 +55,7 @@
                                     @enderror
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" id="description" name="description" placeholder="Enter category description"> {{ old('description') }} </textarea>
+                                        <textarea class="form-control" id="description" name="description" placeholder="Enter category description"> {{ $category->description }} </textarea>
                                     </div>
                                     @error('description')
                                         <span class="text-danger">{{ $message }}</span>

@@ -36,7 +36,7 @@
                                 <table class="table table-striped table-bordered table-hover align-middle text-center table-responsive">
                                     <thead>
                                         <tr>
-                                            <th scope="col">ID</th>
+                                            <th scope="col">SL</th>
                                             <th scope="col">Title</th>
                                             <th scope="col">Slug</th>
                                             <th scope="col">Status</th>
@@ -52,11 +52,16 @@
                                                 {{-- <th scope="row">{{ $category->id }}</th> --}}
                                                 <td>{{ $category->title }}</td>
                                                 <td>{{ $category->slug }}</td>
-                                                <td>{{ $category->status }}</td>
+                                                <td><span class="badge bg-{{ $category->status == 1 ? 'success' : 'danger' }}">{{ $category->status == 1 ? 'Active' : 'Inactive' }}</span></td>
                                                 <td>{{ date('M d, Y, H:i:s A', strtotime($category->created_at)) }}</td>
                                                 <td>{{ $category->updated_at != $category->created_at ? date('M d, Y, H:i:s A', strtotime($category->updated_at)) : '-' }}</td>
                                                 <td>
-                                                    <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+                                                    <div class="btn-group gap-2" role="group">
+                                                        <a href="{{ route('category.status', $category->id) }}" class="btn btn-{{ $category->status == 1 ? 'danger' : 'success' }}">{{ $category->status == 1 ? 'Inactive' : 'Active'}}</a>
+
+                                                        <a href="{{ route('category.edit', $category->id) }}" class="btn btn-primary">Edit</a>
+                                                        <a href="{{ route('category.delete', $category->id) }}" class="btn btn-danger">Delete</a>
+                                                    </div>
                                                     
                                                 </td>
                                             </tr>

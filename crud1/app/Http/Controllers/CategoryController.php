@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\category;
-use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CategoryController extends Controller
 {
+    use SoftDeletes;
     /**
      * Display a listing of the resource.
      */
@@ -30,8 +33,14 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'title' => 'required|max:255|min:3|unique:categories,title',
+            'description' => 'nullable',
+            'status' => 'required |boolean',
+        ]);
+
         $category = new category();
         $category->title = $request->title;
         $category->slug = str::slug($request->title);
@@ -52,24 +61,47 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(category $category)
+    public function edit($id)
     {
-        //
+        $category = category::findOrFail($id);
+        return view('category.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, category $category)
+    public function update(Request $request, $id)
     {
-        //
+         $request->validate([
+            'title' => 'required|max:255|min:3|unique:categories,title' . $id,
+            'description' => 'nullable',
+            'status' => 'required |boolean',
+        ]);
+
+        $category = category::findOrFail($id);
+        $category->title = $request->title;
+        $category->slug = str::slug($request->title);
+        $category->description = $request->description;
+        $category->status = $request->status;
+        $category->save();
+        return redirect()->route('category.index')->withInput()->with('success', 'Category updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(category $category)
+    public function delete($id)
     {
-        //
+        $category = category::findOrFail($id);
+        $category->delete();
+        return redirect()->route('category.index')->withInput()->with('success', 'Category deleted successfully');
+    }
+
+    public function status($id)
+    {
+        $category = category::findOrFail($id);
+        $category->status = !$category->status;
+        $category->update();
+        return redirect()->route('category.index')->with('success', 'Category status updated successfully');
     }
 }
